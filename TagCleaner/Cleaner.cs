@@ -2,8 +2,16 @@
 
 namespace TagCleaner
 {
+    /// <summary>
+    /// Utility class to clean up XML by replacing PackageReference elements that only have a nested Version element.
+    /// </summary>
     public class Cleaner
     {
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="xmlSource"></param>
+        /// <exception cref="ArgumentException"></exception>
         public Cleaner(string xmlSource)
         {
             try
@@ -18,6 +26,11 @@ namespace TagCleaner
 
         private readonly XDocument doc;
 
+        /// <summary>
+        /// Read the XML, replace PackageReference elements that only have nested Version element.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public string Clean()
         {
             var project = doc.Element("Project");
@@ -25,26 +38,11 @@ namespace TagCleaner
                 throw new InvalidOperationException("The XML does not contain a <Project> element.");
 
             // Find packages with Version elements only and no other elements
-            var packages = project.Descendants("PackageReference")
+            var toReplace = project.Descendants("PackageReference")
                 .Where(pr => pr.Elements("Version").Any()
                     && !pr.Elements().Any(e => e.Name != "Version"))
                 .ToList();
-            //var toReplace = project
-            //    .Descendants("PackageReference")
-            //    .Where(pr =>
-            //        pr.HasAttributes &&
-            //        pr.Attribute("Include") != null &&
-            //        pr.Attribute("Version") != null &&
-            //        !pr.Elements().Any()
-            //    )
-            //    .ToList();
-
-            // only pacakges with no other elements
-            var toReplace = packages;
-                //.Where(pr => !pr.Elements().Any(e => e.Name != "Version"))
-                //.ToList();
-
-
+          
             foreach (var pr in toReplace)
             {
                 // Create new inline element
@@ -63,7 +61,6 @@ namespace TagCleaner
 
             var result = doc.ToString(SaveOptions.None);
             return result;
-            //doc.Save(csprojPath);
         }
     }
 }
