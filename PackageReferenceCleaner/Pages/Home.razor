@@ -2,6 +2,80 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>PackageReference Cleaner</h1>
+<p>This utility cleans up a <i>.csproj</i> or <i>.vbproj</i> file's <code>&lt;PackageReference&gt;</code> tags to inline format.</p>
+<div class="container py-4">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <textarea class="form-control" placeholder="Paste your project XML here" @bind=input></textarea>
+        </div>
+        <div class="col-md-6">
+            <textarea class="form-control" placeholder="Cleaned up version" @bind=result></textarea>
+        </div>
+    </div><div class="row mt-3">
+        <div class="col-12">
+            <button class="btn btn-primary w-100" @onclick="CleanTags">Clean Tags</button>
+            @if (message != null)
+            {
+                <div class="alert alert-danger w-100">@message</div>
+            }
+        </div>
+    </div>
+</div>
+<h4>Explanation</h4>
+<p>There are two layouts for <code>PackageReference</code> entries in a .NET project file: <i>inline</i> and <i>nested</i>.</p>
+<pre style="font-family:Cascadia Code;font-size:13px;color:gainsboro;background:#1e1e1e;"><span style="color:gray;">		&lt;!--</span><span style="color:#57a64a;">Inline</span><span style="color:gray;">--&gt;</span>
+<span style="color:gray;">		&lt;</span><span style="color:#569cd6;">PackageReference</span><span style="color:gray;">&nbsp;</span><span style="color:#92caf4;">Include</span><span style="color:gray;">=</span><span style="color:gray;">&quot;</span><span style="color:#c8c8c8;">PackageName</span><span style="color:gray;">&quot;</span><span style="color:gray;">&nbsp;</span><span style="color:#92caf4;">Version</span><span style="color:gray;">=</span><span style="color:gray;">&quot;</span><span style="color:#c8c8c8;">1.2.3</span><span style="color:gray;">&quot;</span><span style="color:gray;">&nbsp;/&gt;</span>
+<span style="color:gray;">		</span>
+<span style="color:gray;">		&lt;!--</span><span style="color:#57a64a;">Nested</span><span style="color:gray;">--&gt;</span>
+<span style="color:gray;">		&lt;</span><span style="color:#569cd6;">PackageReference</span><span style="color:gray;">&nbsp;</span><span style="color:#92caf4;">Include</span><span style="color:gray;">=</span><span style="color:gray;">&quot;</span><span style="color:#c8c8c8;">PackageName</span><span style="color:gray;">&quot;</span><span style="color:gray;">&gt;</span>
+<span style="color:gray;">			&lt;</span><span style="color:#569cd6;">Version</span><span style="color:gray;">&gt;</span><span style="color:#c8c8c8;">1.2.3</span><span style="color:gray;">&lt;/</span><span style="color:#569cd6;">Version</span><span style="color:gray;">&gt;</span>
+<span style="color:gray;">		&lt;/</span><span style="color:#569cd6;">PackageReference</span><span style="color:gray;">&gt;</span>
+ 
+</pre>
+<p>
+    I prefer the inline format as it's cleaner and easier to read and sort package references. However,
+    sometimes the Nuget package manager will use the nested format when updating/adding packages to a project file.
+    This utility will convert all nested <code>&lt;PackageReference&gt;</code> tags to the inline format. It will
+    also respect any nested references that have non-Version elements, for example:
+</p>
+<code>
+<pre style="font-family:Cascadia Code;font-size:13px;color:gainsboro;background:#1e1e1e;"><span style="color:gray;">&lt;</span><span style="color:#569cd6;">PackageReference</span>&nbsp;<span style="color:#9cdcfe;">Include</span><span style="color:#b4b4b4;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#c8c8c8;">Microsoft.TypeScript.MSBuild</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gray;">&gt;</span>
+&nbsp;&nbsp;<span style="color:gray;">&lt;</span><span style="color:#569cd6;">Version</span><span style="color:gray;">&gt;</span>4.7.4<span style="color:gray;">&lt;</span><span style="color:gray;">/</span><span style="color:#569cd6;">Version</span><span style="color:gray;">&gt;</span>
+&nbsp;&nbsp;<span style="color:gray;">&lt;</span><span style="color:#569cd6;">IncludeAssets</span><span style="color:gray;">&gt;</span>runtime;&nbsp;build;&nbsp;native;&nbsp;contentfiles;&nbsp;analyzers;&nbsp;buildtransitive<span style="color:gray;">&lt;</span><span style="color:gray;">/</span><span style="color:#569cd6;">IncludeAssets</span><span style="color:gray;">&gt;</span>
+&nbsp;&nbsp;<span style="color:gray;">&lt;</span><span style="color:#569cd6;">PrivateAssets</span><span style="color:gray;">&gt;</span>all<span style="color:gray;">&lt;</span><span style="color:gray;">/</span><span style="color:#569cd6;">PrivateAssets</span><span style="color:gray;">&gt;</span>
+<span style="color:gray;">&lt;</span><span style="color:gray;">/</span><span style="color:#569cd6;">PackageReference</span><span style="color:gray;">&gt;</span></pre>
+</code>
+<hr />
+<p>
+    <b>Important:</b> It is your responsibility to check the output and ensure nothing is lost when
+    replacing your existing file. Always use source control so you can revert any changes!
+</p>
 
-Welcome to your new app.
+@code
+{
+    string? input;
+    string? result;
+    string? message;
+
+    private void CleanTags()
+    {
+        message = null;
+        var xml = input?.Trim();
+        if (string.IsNullOrWhiteSpace(xml))
+        {
+            message = "Please provide a valid XML input.";
+            return;
+        }
+        try
+        {
+            var cleaner = new TagCleaner.Cleaner(input!);
+            result = cleaner.Clean();
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+}

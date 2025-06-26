@@ -1,0 +1,8 @@
+textarea {
+    width: 100%;
+    min-height: 30em; /* Roughly 20 lines */
+    resize: vertical; /* Allow vertical resizing */
+    font-family: 'Cascadia Code', 'Courier New', Courier, monospace;
+    font-size: 10pt;
+    color: darkgreen;
+}
