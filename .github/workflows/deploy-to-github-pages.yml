@@ -53,6 +53,13 @@ jobs:
 #        github_token: ${{ secrets.GITHUB_TOKEN }}
 #        publish_dir: PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot
 
+    - name: Initialize gh-pages branch
+      run: |
+        git checkout --orphan gh-pages
+        git rm -rf .
+        git commit --allow-empty -m "init gh-pages"
+        git push origin gh-pages
+
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
