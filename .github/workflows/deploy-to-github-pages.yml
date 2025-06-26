@@ -24,7 +24,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Publish
-      run: dotnet publish -c Release -o release --nologo
+      run: dotnet publish -c Release -p:BasePath="PackageReferenceCleaner" -o release --nologo
 
     - name: Copy index.html to 404.html (for client-side routing)
       run: cp release/wwwroot/index.html release/wwwroot/404.html
