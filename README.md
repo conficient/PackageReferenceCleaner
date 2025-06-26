@@ -6,7 +6,7 @@ I don't like when my projects have nested `<PackageReferences>` with a `<Version
 
 This tool will reformat any PackageReference elements in your project files to the cleaner inline format.
 
-It runs as a Blazor WebAssembly stand-alone appliction using .NET 10 (pre-release).
+It runs as a Blazor WebAssembly stand-alone application using .NET 10 (pre-release).
 
 #### Credits
 
