@@ -47,8 +47,19 @@ jobs:
     - name: Copy index.html to 404.html (for client-side routing)
       run: cp PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot/index.html PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot/404.html
 
+#    - name: Deploy to GitHub Pages
+#      uses: peaceiris/actions-gh-pages@v4
+#      with:
+#        github_token: ${{ secrets.GITHUB_TOKEN }}
+#        publish_dir: PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot
+
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot
+        branch: gh-pages
+        folder: PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit_message: "Deploy to GitHub Pages"
+        clean: true
+        force_orphan: true
+        silent: true
