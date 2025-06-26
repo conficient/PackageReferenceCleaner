@@ -59,7 +59,5 @@ jobs:
         branch: gh-pages
         folder: PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit_message: "Deploy to GitHub Pages"
         clean: true
-        force_orphan: true
         silent: true
