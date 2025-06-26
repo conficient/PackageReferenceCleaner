@@ -1,5 +1,7 @@
 # Package Reference Cleaner
 
+Site: https://conficient.github.io/PackageReferenceCleaner/
+
 I don't like when my projects have nested `<PackageReferences>` with a `<Version> `element tag - they're harder to read and maintain.
 
 This tool will reformat any PackageReference elements in your project files to the cleaner inline format.
