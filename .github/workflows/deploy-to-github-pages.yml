@@ -39,16 +39,16 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish PackageReferenceCleaner/PackageReferenceCleaner.csproj -c Release -p:BasePath="PackageReferenceCleaner" --nologo --no-build -o release
+      run: dotnet publish PackageReferenceCleaner/PackageReferenceCleaner.csproj -c Release --nologo
 
-    - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
-      run: sed -i 's/<base href="\/" \/>/<base href="\/PackageReferenceCleaner\/" \/>/g' release/wwwroot/index.html
-    
+    - name: Change base-tag in index.html for GitHub Pages
+      run: sed -i 's|<base href="/" />|<base href="/PackageReferenceCleaner/" />|g' PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot/index.html
+
     - name: Copy index.html to 404.html (for client-side routing)
-      run: cp release/wwwroot/index.html release/wwwroot/404.html
+      run: cp PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot/index.html PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot/404.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: release/wwwroot
+        publish_dir: PackageReferenceCleaner/bin/Release/net10.0/publish/wwwroot
