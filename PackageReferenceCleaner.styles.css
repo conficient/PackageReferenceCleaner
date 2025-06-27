@@ -1,3 +1,28 @@
+/* /Layout/Counter.razor.rz.scp.css */
+/*.counter {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.1rem;
+    font-family: 'Segoe UI', Tahoma, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+*/}
+.counter-card[b-nctvk5yzy0] {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.count[b-nctvk5yzy0] {
+    font-size: 4rem;
+    font-weight: 700;
+}
+
+.label[b-nctvk5yzy0] {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
 /* /Layout/MainLayout.razor.rz.scp.css */
 .page[b-s1cyv7pmre] {
     position: relative;
