@@ -1,13 +1,20 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>PackageReference Cleaner</PageTitle>
 
 <h1>PackageReference Cleaner</h1>
-<p>This utility cleans up a <i>.csproj</i> or <i>.vbproj</i> file's <code>&lt;PackageReference&gt;</code> tags to inline format.</p>
+<p>
+    This utility cleans up a <i>.csproj</i> or <i>.vbproj</i> file's <code>&lt;PackageReference&gt;</code>
+    tags to inline format.
+</p>
+<p>
+    Paste the <code>&lt;ItemGroup&gt;</code> section of your project file containing your
+    PackageReferences in the XML field and click <b>Clean</b>.
+</p>
 <div class="container py-4">
     <div class="row g-3">
         <div class="col-md-6">
-            <textarea class="form-control" placeholder="Paste your project XML here" @bind=input></textarea>
+            <textarea class="form-control" placeholder="Paste your XML here" @bind=input></textarea>
         </div>
         <div class="col-md-6">
             <textarea class="form-control" placeholder="Cleaned up version" @bind=result></textarea>

@@ -30,15 +30,10 @@ namespace TagCleaner
         /// Read the XML, replace PackageReference elements that only have nested Version element.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
         public string Clean()
         {
-            var project = doc.Element("Project");
-            if (project == null) 
-                throw new InvalidOperationException("The XML does not contain a <Project> element.");
-
             // Find packages with Version elements only and no other elements
-            var toReplace = project.Descendants("PackageReference")
+            var toReplace = doc.Descendants("PackageReference")
                 .Where(pr => pr.Elements("Version").Any()
                     && !pr.Elements().Any(e => e.Name != "Version"))
                 .ToList();
