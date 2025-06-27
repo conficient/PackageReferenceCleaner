@@ -1,0 +1,24 @@
+/*.counter {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.1rem;
+    font-family: 'Segoe UI', Tahoma, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+*/}
+.counter-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.count {
+    font-size: 4rem;
+    font-weight: 700;
+}
+
+.label {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}

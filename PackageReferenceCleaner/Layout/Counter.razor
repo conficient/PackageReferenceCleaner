@@ -1,0 +1,34 @@
+﻿@*
+    Simple get-based visitor counter using https://v2.jasoncameron.dev/abacus/
+*@
+@inject HttpClient Http
+<span class="badge px-3 py-2 d-inline-flex align-items-center" style="background: linear-gradient(0deg, #0dfffd, #6610f2); color: white; box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);">
+    <img src="icon-192.png" alt="App Icon" class="img-fluid" style="height: 16px; width: 16px;" />
+    <span id="pageCount">@Count</span>
+    <small class="ms-1 text-white-50">@Name</small>
+</span>
+
+@code {
+    [Parameter] public string Name { get; set; } = "views";
+    int Count = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<CounterResult>($"https://abacus.jasoncameron.dev/hit/PackageReference/{Name}");
+            Count = result?.Value ?? 0;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error fetching visitor count: {e.Message}");
+            // Fallback to zero if there's an error
+            Count = 0;
+        }
+    }
+
+    internal class CounterResult 
+    {
+        public int Value { get; set; }  
+    }
+}
