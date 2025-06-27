@@ -1,0 +1,3 @@
+﻿# see https://v2.jasoncameron.dev/abacus/
+GET https://abacus.jasoncameron.dev/hit/PackageReference/test
+

@@ -26,6 +26,10 @@
             {
                 <div class="alert alert-danger w-100">@message</div>
             }
+            @if (success)
+            {
+                <Counter Name="runs" />
+            }
         </div>
     </div>
 </div>
@@ -64,9 +68,11 @@
     string? input;
     string? result;
     string? message;
+    bool success = false;
 
     private void CleanTags()
     {
+        success = false;
         message = null;
         var xml = input?.Trim();
         if (string.IsNullOrWhiteSpace(xml))
@@ -78,6 +84,7 @@
         {
             var cleaner = new TagCleaner.Cleaner(input!);
             result = cleaner.Clean();
+            success = true;
         }
         catch (Exception ex)
         {
