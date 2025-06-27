@@ -29,13 +29,13 @@ namespace TagCleaner.Tests
                 </Project>
                 """;
 
-            var cleaner = new Cleaner(xml); 
+            var cleaner = new Cleaner(xml);
             var actual = cleaner.Clean();
-            
-            AssertXmlEqual(expected, actual);   
+
+            AssertXmlEqual(expected, actual);
             //Assert.AreEqual(expected, actual);
         }
-        
+
         [TestMethod]
         public void Clean_ConvertsPackagesToInline()
         {
@@ -68,13 +68,52 @@ namespace TagCleaner.Tests
                 </Project>
                 """;
 
-            var cleaner = new Cleaner(xml); 
-            var actual = cleaner.Clean();   
+            var cleaner = new Cleaner(xml);
+            var actual = cleaner.Clean();
 
             AssertXmlEqual(expected, actual);
-            //Assert.AreEqual(expected, actual);
         }
-        
+
+        [TestMethod]
+        public void Clean_WorksWithOnlyItemGroup()
+        {
+            const string xml = """
+                <ItemGroup>
+                  <PackageReference Include="PackageName">
+                    <Version>1.2.3</Version>
+                  </PackageReference>
+                </ItemGroup>
+                """;
+            const string expected = """
+                <ItemGroup>
+                  <PackageReference Include="PackageName" Version="1.2.3" />
+                </ItemGroup>
+                """;
+
+            var cleaner = new Cleaner(xml);
+            var actual = cleaner.Clean();
+
+            AssertXmlEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Clean_WorksWithOnlySingleElement()
+        {
+            const string xml = """
+                  <PackageReference Include="PackageName">
+                    <Version>1.2.3</Version>
+                  </PackageReference>
+                """;
+            const string expected = """
+                  <PackageReference Include="PackageName" Version="1.2.3" />
+                """;
+
+            var cleaner = new Cleaner(xml);
+            var actual = cleaner.Clean();
+
+            AssertXmlEqual(expected, actual);
+        }
+
         [TestMethod]
         public void Clean_RetainsInlinePackages()
         {
@@ -109,12 +148,12 @@ namespace TagCleaner.Tests
                 </Project>
                 """;
 
-            var cleaner = new Cleaner(xml); 
-            var actual = cleaner.Clean();   
+            var cleaner = new Cleaner(xml);
+            var actual = cleaner.Clean();
 
             AssertXmlEqual(expected, actual);
         }
-        
+
         [TestMethod]
         public void Clean_RetainsPackagesWithNonVersionElements()
         {
@@ -159,8 +198,8 @@ namespace TagCleaner.Tests
                 </Project>
                 """;
 
-            var cleaner = new Cleaner(xml); 
-            var actual = cleaner.Clean();   
+            var cleaner = new Cleaner(xml);
+            var actual = cleaner.Clean();
 
             AssertXmlEqual(expected, actual);
         }
@@ -169,17 +208,15 @@ namespace TagCleaner.Tests
         /// We expect an exception if the XML does not contain a <Project> element.
         /// </summary>
         [TestMethod]
-        public void Clean_Throws_If_No_Project()
+        public void Ctor_ThrowsIfXmlIsInvalid()
         {
             const string xml = """
-                <Root>
-                  <Test>
-                  </Test>
-                </Root>
+                <Project>
+                  <invalid>Invalid xml test
+                </Project>
                 """;
-            var cleaner = new Cleaner(xml); 
 
-            Assert.Throws<InvalidOperationException>(() => cleaner.Clean());
+            Assert.Throws<ArgumentException>(() => _ = new Cleaner(xml));
         }
 
         /// <summary>
@@ -191,7 +228,7 @@ namespace TagCleaner.Tests
         {
             var expectedDoc = XDocument.Parse(expected);
             var actualDoc = XDocument.Parse(actual);
-            Assert.IsTrue(XNode.DeepEquals(expectedDoc, actualDoc), 
+            Assert.IsTrue(XNode.DeepEquals(expectedDoc, actualDoc),
                 $"XML documents are not equal.\nExpected:\n{expected}\nActual:\n{actual}");
         }
     }
